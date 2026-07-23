@@ -1,0 +1,381 @@
+{
+  "date": "2026-07-18",
+  "label": "July 18, 2026",
+  "meta": {
+    "lastVerified": {
+      "electricity": "2026-07-18",
+      "wages": "2026-07-18",
+      "food": "2026-07-18",
+      "education": "2026-07-18",
+      "aiEnergy": "2026-07-18",
+      "aiTraining": "2026-07-18",
+      "models": "2026-07-18",
+      "fx": "2026-07-18"
+    }
+  },
+  "constants": {
+    "WH_PER_KCAL": 1.163,
+    "HUMAN_KCAL_PER_DAY": 2000,
+    "WORK_HOURS_PER_DAY": 8,
+    "ELEC_RESIDENTIAL": 0.1883,
+    "ELEC_COMMERCIAL": 0.1351,
+    "ELEC_INDUSTRIAL": 0.0866,
+    "FOOD_USD_PER_DAY": 15.5,
+    "MEDIAN_WEEKLY_EARNINGS": 1235,
+    "K12_PER_PUPIL_YEAR": 16080,
+    "K12_YEARS": 13,
+    "COLLEGE_PER_PUPIL_YEAR": 36101,
+    "COLLEGE_YEARS": 4,
+    "CAREER_YEARS": 40,
+    "WORK_HOURS_PER_YEAR": 1800,
+    "BASE_QUERY_WH": 0.34,
+    "BASE_QUERY_TOKENS": 800,
+    "TRAINING_RUN_USD": 300000000,
+    "TRAINING_ENERGY_SHARE": 0.04,
+    "LIFETIME_QUERIES": 1000000000000,
+    "FX_GBPUSD": 1.29,
+    "FX_EURUSD": 1.09,
+    "WATER_ML_PER_WH": 1.08,
+    "HUMAN_WATER_L_PER_KCAL": 1.0,
+    "HUMAN_DRINKING_L_PER_DAY": 3.0
+  },
+  "sources": {
+    "eia": {
+      "label": "EIA Electric Power Monthly (Apr 2026)",
+      "url": "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=table_5_03"
+    },
+    "bls": {
+      "label": "BLS Usual Weekly Earnings, Q1 2026",
+      "url": "https://www.bls.gov/news.release/wkyeng.nr0.htm"
+    },
+    "usda": {
+      "label": "USDA Food Plans: Monthly Cost of Food",
+      "url": "https://www.fna.usda.gov/research/cnpp/usda-food-plans/cost-food-monthly-reports"
+    },
+    "nces": {
+      "label": "NCES / educationdata.org, public education spending",
+      "url": "https://educationdata.org/public-education-spending-statistics"
+    },
+    "google": {
+      "label": "Google Cloud: environmental impact of AI inference (Aug 2025)",
+      "url": "https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference"
+    },
+    "epochChat": {
+      "label": "Epoch AI: How much energy does ChatGPT use?",
+      "url": "https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use"
+    },
+    "epochTrain": {
+      "label": "Epoch AI / Cottier et al., The rising costs of training frontier AI models",
+      "url": "https://arxiv.org/abs/2405.21015"
+    },
+    "efa": {
+      "label": "Editorial Freelancers Association rate survey (2025)",
+      "url": "https://www.the-efa.org/rates/"
+    },
+    "translation": {
+      "label": "Industry translation rate guides (2025–26)",
+      "url": "https://www.smartling.com/blog/translation-rates"
+    },
+    "anthropic": {
+      "label": "Anthropic API pricing",
+      "url": "https://platform.claude.com/docs/en/pricing"
+    },
+    "openaiSol": {
+      "label": "OpenAI: Previewing GPT-5.6 Sol",
+      "url": "https://openai.com/index/previewing-gpt-5-6-sol/"
+    },
+    "openai": {
+      "label": "OpenAI API pricing",
+      "url": "https://developers.openai.com/api/docs/pricing"
+    },
+    "gemini": {
+      "label": "Gemini Developer API pricing",
+      "url": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    "openrouter": {
+      "label": "OpenRouter model marketplace (live API)",
+      "url": "https://openrouter.ai/api/v1/models"
+    },
+    "mit": {
+      "label": "MIT Technology Review on Google's per-prompt data",
+      "url": "https://www.technologyreview.com/2025/08/21/1122288/google-gemini-ai-energy/"
+    },
+    "fao": {
+      "label": "FAO: water use in agriculture (~1 litre per kilocalorie of food)",
+      "url": "https://www.fao.org/land-water/water/en/"
+    },
+    "wfn": {
+      "label": "Water Footprint Network: dietary water footprints",
+      "url": "https://www.waterfootprint.org/water-footprint-2/"
+    }
+  },
+  "models": [
+    {
+      "id": "fable",
+      "or": "anthropic/claude-fable-5",
+      "name": "Claude Fable 5",
+      "group": "frontier",
+      "inPerM": 10,
+      "outPerM": 50,
+      "confidence": "confirmed",
+      "source": "anthropic",
+      "note": "Vendor list price; OpenRouter agrees."
+    },
+    {
+      "id": "opus",
+      "or": "anthropic/claude-opus-4.8",
+      "name": "Claude Opus 4.8",
+      "group": "frontier",
+      "inPerM": 5,
+      "outPerM": 25,
+      "confidence": "confirmed",
+      "source": "anthropic",
+      "note": "Vendor list price; OpenRouter agrees."
+    },
+    {
+      "id": "sonnet",
+      "or": "anthropic/claude-sonnet-5",
+      "name": "Claude Sonnet 5",
+      "group": "frontier",
+      "inPerM": 3,
+      "outPerM": 15,
+      "confidence": "confirmed",
+      "source": "anthropic",
+      "note": "Vendor list price ($2/$10 intro through Aug 31, 2026)."
+    },
+    {
+      "id": "haiku",
+      "or": "anthropic/claude-haiku-4.5",
+      "name": "Claude Haiku 4.5",
+      "group": "frontier",
+      "inPerM": 1,
+      "outPerM": 5,
+      "confidence": "confirmed",
+      "source": "anthropic",
+      "note": "Vendor list price; OpenRouter agrees."
+    },
+    {
+      "id": "sol",
+      "or": "openai/gpt-5.6-sol",
+      "name": "GPT-5.6 Sol",
+      "group": "frontier",
+      "inPerM": 5,
+      "outPerM": 30,
+      "confidence": "confirmed",
+      "source": "openaiSol",
+      "note": "Vendor announcement (GA July 9, 2026); OpenRouter agrees."
+    },
+    {
+      "id": "terra",
+      "or": "openai/gpt-5.6-terra",
+      "name": "GPT-5.6 Terra",
+      "group": "frontier",
+      "inPerM": 2.5,
+      "outPerM": 15,
+      "confidence": "confirmed",
+      "source": "openaiSol",
+      "note": "Vendor announcement; OpenRouter agrees."
+    },
+    {
+      "id": "luna",
+      "or": "openai/gpt-5.6-luna",
+      "name": "GPT-5.6 Luna",
+      "group": "frontier",
+      "inPerM": 1,
+      "outPerM": 6,
+      "confidence": "confirmed",
+      "source": "openaiSol",
+      "note": "Vendor announcement; OpenRouter agrees."
+    },
+    {
+      "id": "gpt52",
+      "or": "openai/gpt-5.2",
+      "name": "GPT-5.2",
+      "group": "frontier",
+      "inPerM": 1.75,
+      "outPerM": 14,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "OpenRouter marketplace price. Third-party trackers report $0.875/$7 — sources conflict."
+    },
+    {
+      "id": "gem31",
+      "or": "google/gemini-3.1-pro-preview",
+      "name": "Gemini 3.1 Pro",
+      "group": "frontier",
+      "inPerM": 2,
+      "outPerM": 12,
+      "confidence": "confirmed",
+      "source": "gemini",
+      "note": "Vendor list price for ≤200K context; higher beyond."
+    },
+    {
+      "id": "grok45",
+      "or": "x-ai/grok-4.5",
+      "name": "Grok 4.5",
+      "group": "frontier",
+      "inPerM": 2,
+      "outPerM": 6,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "OpenRouter marketplace price; discovered by the auto-update script."
+    },
+    {
+      "id": "dsv4p",
+      "or": "deepseek/deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "group": "open",
+      "inPerM": 0.435,
+      "outPerM": 0.87,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "Hosted marketplace price for the open-weight model."
+    },
+    {
+      "id": "dsv4f",
+      "or": "deepseek/deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash",
+      "group": "open",
+      "inPerM": 0.098,
+      "outPerM": 0.196,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "Hosted marketplace price for the open-weight model."
+    },
+    {
+      "id": "kimik3",
+      "or": "moonshotai/kimi-k3",
+      "name": "Kimi K3",
+      "group": "open",
+      "inPerM": 3,
+      "outPerM": 15,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "Hosted marketplace price for the open-weight model."
+    },
+    {
+      "id": "qwen37",
+      "or": "qwen/qwen3.7-max",
+      "name": "Qwen3.7 Max",
+      "group": "open",
+      "inPerM": 1.475,
+      "outPerM": 4.425,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "Hosted marketplace price."
+    },
+    {
+      "id": "mav",
+      "or": "meta-llama/llama-4-maverick",
+      "name": "Llama 4 Maverick",
+      "group": "open",
+      "inPerM": 0.2,
+      "outPerM": 0.8,
+      "confidence": "estimated",
+      "source": "openrouter",
+      "note": "Host-dependent: the same weights cost $0.10–$3.00/MTok across hosts. Marketplace floor shown."
+    },
+    {
+      "id": "inkling",
+      "or": "thinkingmachines/inkling",
+      "name": "Inkling (Thinking Machines)",
+      "group": "open",
+      "inPerM": 1,
+      "outPerM": 4.05,
+      "confidence": "reported",
+      "source": "openrouter",
+      "note": "Hosted marketplace price; released July 2026."
+    },
+    {
+      "id": "selfhost",
+      "or": null,
+      "name": "Any open model, self-hosted",
+      "group": "self",
+      "inPerM": null,
+      "outPerM": null,
+      "confidence": "unavailable",
+      "source": "openrouter",
+      "note": "No single price exists — cost depends on your GPUs, utilization, and power contract. Typical clusters run $0.50–$5.00/GPU-hour."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "article",
+      "name": "Write a 1,000-word article",
+      "icon": "✍️",
+      "humanHours": 4,
+      "humanPrice": 250,
+      "humanPriceNote": "$0.25/word — professional EFA median; content-mill rates run $0.05–0.10/word",
+      "humanPriceSource": "efa",
+      "tokensIn": 500,
+      "tokensOut": 4500,
+      "tokenNote": "≈1,300 tokens of prose plus ~3,000 thinking tokens",
+      "reviewMinutes": 30
+    },
+    {
+      "id": "translate",
+      "name": "Translate 1,000 words",
+      "icon": "🌐",
+      "humanHours": 2.5,
+      "humanPrice": 150,
+      "humanPriceNote": "$0.15/word — common language pair, professional rate",
+      "humanPriceSource": "translation",
+      "tokensIn": 1400,
+      "tokensOut": 2000,
+      "tokenNote": "source text in, translated text plus light reasoning out",
+      "reviewMinutes": 15
+    },
+    {
+      "id": "summarize",
+      "name": "Summarize a 50-page report",
+      "icon": "📄",
+      "humanHours": 3.5,
+      "humanPrice": 108,
+      "humanPriceNote": "3.5 h at the $30.83 median full-time wage",
+      "humanPriceSource": "bls",
+      "tokensIn": 20000,
+      "tokensOut": 3500,
+      "tokenNote": "~15,000 words in; executive summary plus reasoning out",
+      "reviewMinutes": 10
+    },
+    {
+      "id": "support",
+      "name": "Resolve a support ticket",
+      "icon": "🎧",
+      "humanHours": 0.13,
+      "humanPrice": 7,
+      "humanPriceNote": "typical fully-loaded cost per human contact ($5–12 industry range)",
+      "humanPriceSource": "bls",
+      "tokensIn": 1500,
+      "tokensOut": 800,
+      "tokenNote": "ticket history and knowledge-base context in, reply out",
+      "reviewMinutes": 2
+    },
+    {
+      "id": "bugfix",
+      "name": "Fix a small code bug",
+      "icon": "🐛",
+      "humanHours": 1.5,
+      "humanPrice": 90,
+      "humanPriceNote": "1.5 h at $60/h loaded developer cost",
+      "humanPriceSource": "bls",
+      "tokensIn": 200000,
+      "tokensOut": 15000,
+      "tokenNote": "agentic session: repo context read across turns, patch and tests out",
+      "reviewMinutes": 20
+    },
+    {
+      "id": "classify",
+      "name": "Classify 1,000 feedback snippets",
+      "icon": "🏷️",
+      "humanHours": 5.6,
+      "humanPrice": 100,
+      "humanPriceNote": "~20 s per item at $18/h data-entry wage",
+      "humanPriceSource": "bls",
+      "tokensIn": 150000,
+      "tokensOut": 5000,
+      "tokenNote": "150 tokens per snippet in, one label out, batched",
+      "reviewMinutes": 15
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Grid, Live — The Price of Intelligence</title>
+  <meta name="description" content="Live electricity price, grid greenness, and regional carbon for your area — and what a model task costs in energy right this minute.">
+  <meta property="og:title" content="Your Grid, Live — The Price of Intelligence">
+  <meta property="og:description" content="Live grid mix, regional carbon, and the energy price of an AI task, right this minute.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b0b0b'/%3E%3Ctext x='50' y='74' font-size='62' text-anchor='middle'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem("poi-theme"); } catch (e) {}
+      var theme = (stored === "light" || stored === "dark")
+        ? stored
+        : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">The Price of Intelligence</a>
+      <div class="nav-explore">
+        <button class="nav-explore-trigger" aria-haspopup="true" aria-expanded="false">Explore <span class="chev" aria-hidden="true">›</span></button>
+        <div class="nav-menu" aria-label="Pages">
+          <a href="index.html">The benchmark</a>
+          <a href="live.html" aria-current="page">Live grid</a>
+          <a href="water.html">Water</a>
+          <a href="greenbench.html">GreenBench</a>
+        </div>
+      </div>
+      <span class="spacer"></span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">◐</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="breadcrumb"><a href="index.html">The Price of Intelligence</a> · a lens on the benchmark</p>
+      <h1>Your grid, live</h1>
+      <div class="kicker">The energy lens, right now, where you are</div>
+      <p class="sub">
+        The main site prices AI energy at US average rates. Electricity is really priced by the
+        half-hour, and its carbon content swings with the wind — literally. Where free, open APIs
+        exist, this page reads your grid <em>right now</em> and reprices the energy behind a task.
+        Britain's grid is unusually clean — which makes it, on the physics, one of the better
+        places in the world to run AI.
+      </p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">Region</div>
+        <h2>Where are you plugged in?</h2>
+        <p>Live data availability differs by region — badges show what is live, static, or estimated.</p>
+      </div>
+
+      <div class="filter-row" id="region-chips" role="tablist" aria-label="Region selector"></div>
+
+      <div class="live-card" id="national-card" style="display:none; margin-bottom:20px">
+        <h3>Great Britain, right now <span class="badge confirmed"><span class="glyph">●</span>live · NESO / Carbon Intensity API</span></h3>
+        <p class="sub" id="national-sub">—</p>
+        <div class="comp" style="margin-top:16px">
+          <div class="comp-bar" id="national-bar" aria-hidden="true" style="height:18px"></div>
+          <div class="comp-legend" id="national-legend" style="grid-template-columns:repeat(auto-fit,minmax(130px,1fr));display:grid;gap:6px 18px"></div>
+        </div>
+      </div>
+
+      <div class="live-grid">
+        <article class="live-card" id="grid-card">
+          <h3>Your region right now <span id="grid-badge"></span></h3>
+          <p class="sub" id="grid-sub">—</p>
+          <div class="rows" id="grid-rows"></div>
+          <div class="meter" id="green-meter" style="display:none">
+            <div class="track"><div class="fill" id="green-fill"></div></div>
+            <div class="meter-label"><span>Renewables right now</span><span id="green-pct">—</span></div>
+          </div>
+          <div class="custom-rate" id="custom-rate-row" style="display:none">
+            <label for="custom-rate">Your rate (US ¢/kWh)</label>
+            <input type="number" id="custom-rate" min="1" max="100" step="0.1" value="18.8">
+          </div>
+          <p class="live-note" id="grid-note"></p>
+        </article>
+
+        <article class="live-card">
+          <h3>A task, priced this minute</h3>
+          <p class="sub">Electricity only — the vendor's API bill doesn't change with your grid; this is the energy lens localised.</p>
+          <div class="filter-row" style="margin:16px 0 4px">
+            <select class="mini" id="task-select" aria-label="Task"></select>
+            <select class="mini" id="model-select" aria-label="Model"></select>
+          </div>
+          <div class="live-big" id="task-cost">—</div>
+          <div class="rows" id="task-rows"></div>
+          <p class="live-note" id="task-note"></p>
+        </article>
+      </div>
+
+      <div class="live-card" id="regions-card" style="display:none; margin-top:20px">
+        <h3>The same task, region by region</h3>
+        <p class="sub" id="regions-sub">—</p>
+        <div id="regions-chart" style="margin-top:14px"></div>
+        <p class="live-note" id="regions-note"></p>
+      </div>
+
+      <p class="parity-note" style="margin-top:20px">
+        <strong>Method:</strong> task energy uses the same token-scaled model as the main site
+        (0.34 Wh per ~800-token median query, data centre overhead included). Live prices are what
+        <em>you</em> would pay for that energy locally — real data centres buy power on industrial
+        contracts, typically cheaper, and increasingly site themselves where the strip chart above
+        is greenest. UK: NESO/Oxford Carbon Intensity API (national + 14 regions) and Octopus Agile
+        tariffs. Germany/Austria: aWATTar wholesale spot (retail adds taxes and network fees,
+        typically 2–3×). Currency conversion uses the snapshot's approximate FX rate.
+        Dashboard concept adapted from Kate Morley's
+        <a href="https://grid.iamkate.com/" target="_blank" rel="noopener">National Grid: Live</a> (CC0).
+      </p>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <div class="footer-brand">The Price of Intelligence</div>
+          <p class="footer-tag" id="footer-snap">—</p>
+        </div>
+        <nav class="footer-links" aria-label="All pages">
+          <a href="index.html">The benchmark</a>
+          <a href="water.html">Water lens</a>
+          <a href="live.html">Live grid</a>
+          <a href="greenbench.html">GreenBench</a>
+          <a href="index.html#methodology">Methodology</a>
+        </nav>
+      </div>
+      <p class="footer-fine">Live data: <a href="https://carbonintensity.org.uk" target="_blank" rel="noopener">NESO / Oxford Carbon Intensity API</a> ·
+         <a href="https://octopus.energy/agile/" target="_blank" rel="noopener">Octopus Agile</a> ·
+         <a href="https://www.awattar.de" target="_blank" rel="noopener">aWATTar</a>.
+         Static fallbacks from the dated snapshot on the main page.</p>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="live.js"></script>
+</body>
+</html>

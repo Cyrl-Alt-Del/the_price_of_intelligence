@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Price of Intelligence</title>
+  <meta name="description" content="What a completed task costs when a human mind does it versus a machine one — in dollars, watt-hours, and litres.">
+  <meta property="og:title" content="The Price of Intelligence">
+  <meta property="og:description" content="Same task, one invoice — in dollars, energy, and water — for a human mind and a machine one.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b0b0b'/%3E%3Ctext x='50' y='74' font-size='62' text-anchor='middle'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <script>
+    /* Theme is resolved before first paint so there is no flash.
+       An explicit user choice is stored; otherwise the OS setting is followed live. */
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem("poi-theme"); } catch (e) {}
+      var theme = (stored === "light" || stored === "dark")
+        ? stored
+        : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-current="page">The Price of Intelligence</a>
+      <div class="nav-explore">
+        <button class="nav-explore-trigger" aria-haspopup="true" aria-expanded="false">Explore <span class="chev" aria-hidden="true">›</span></button>
+        <div class="nav-menu" aria-label="Pages">
+          <a href="index.html" aria-current="page">The benchmark</a>
+          <a href="live.html">Live grid</a>
+          <a href="water.html">Water</a>
+          <a href="greenbench.html">GreenBench</a>
+        </div>
+      </div>
+      <span class="spacer"></span>
+      <label class="snapshot-select"><span class="fresh-dot" id="freshness"></span>Data as of
+        <select id="snapshot-select" aria-label="Data snapshot date"></select>
+      </label>
+      <label class="currency-select" id="currency-wrap" title="Display currency">
+        <select id="currency-select" aria-label="Display currency"></select>
+      </label>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">◐</button>
+    </div>
+  </nav>
+
+  <!-- In-page progress rail (hidden on narrow screens) -->
+  <nav class="rail" id="rail" aria-label="On this page"></nav>
+
+  <header class="hero" id="top">
+    <div class="wrap">
+      <div class="kicker">A benchmark · dollars, watt-hours, litres</div>
+      <h1>The Price of Intelligence</h1>
+      <p class="deck">The same task, done by a human mind or a machine one — priced in what
+        each <strong>charges</strong>, and what each <strong>burns</strong>.</p>
+      <div class="hero-figure">
+        <div class="big" id="hero-ratio">—</div>
+        <p class="caption" id="hero-caption">loading…</p>
+      </div>
+    </div>
+  </header>
+
+  <section id="ledger" data-rail="The ledger">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">01 · The ledger</div>
+        <h2>Same task, one invoice</h2>
+        <p>Pick a task. Both sides show the market price of the <em>completed task</em> —
+           what a buyer actually pays — then the same task priced in energy and water.
+           Open each invoice to see what it's made of.</p>
+      </div>
+
+      <div class="filter-row" id="task-chips" role="tablist" aria-label="Task selector"></div>
+      <div class="filter-row">
+        <div class="spacer"></div>
+        <label class="model-select">AI model
+          <select id="model-select" aria-label="AI model"></select>
+        </label>
+      </div>
+
+      <div class="ledger-grid">
+        <article class="worker-card human" aria-label="Human worker cost">
+          <div class="who"><span class="dot"></span>Human professional</div>
+          <div class="price" id="h-price">—</div>
+          <p class="price-note" id="h-price-note"></p>
+          <div class="meta">
+            <div><div class="label">Time</div><div class="val" id="h-time">—</div></div>
+            <div><div class="label">Energy</div><div class="val" id="h-energy">—</div></div>
+            <div><div class="label">Water</div><div class="val" id="h-water">—</div></div>
+          </div>
+          <div class="comp">
+            <div class="comp-title">Inside the price</div>
+            <div class="comp-bar" id="h-comp" aria-hidden="true"></div>
+            <div class="comp-legend" id="h-comp-legend"></div>
+          </div>
+        </article>
+
+        <article class="worker-card ai" aria-label="AI worker cost">
+          <div class="who"><span class="dot"></span><span id="ai-name">AI model</span><span id="ai-badge"></span></div>
+          <div class="price" id="a-price">—</div>
+          <p class="price-note" id="a-price-note"></p>
+          <div class="meta">
+            <div><div class="label">Time</div><div class="val">seconds–minutes</div></div>
+            <div><div class="label">Energy</div><div class="val" id="a-energy">—</div></div>
+            <div><div class="label">Water</div><div class="val" id="a-water">—</div></div>
+          </div>
+          <div class="comp" id="a-comp-wrap">
+            <div class="comp-title">Inside the price</div>
+            <div class="comp-bar" id="a-comp" aria-hidden="true"></div>
+            <div class="comp-legend" id="a-comp-legend"></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="ratio-row ratio-row-3">
+        <a class="stat-tile linked" href="#history">
+          <div class="label">Price gap for this task</div>
+          <div class="value" id="ratio-price">—</div>
+          <div class="sub" id="ratio-price-sub">human market price ÷ AI API price</div>
+        </a>
+        <a class="stat-tile linked" href="#energy">
+          <div class="label">Energy gap for this task</div>
+          <div class="value" id="ratio-energy">—</div>
+          <div class="sub">human metabolic Wh ÷ AI inference Wh</div>
+        </a>
+        <a class="stat-tile linked" href="water.html">
+          <div class="label">Water gap for this task</div>
+          <div class="value" id="ratio-water">—</div>
+          <div class="sub">human food-water ÷ AI full-chain water</div>
+        </a>
+      </div>
+
+      <div class="conf-legend" id="conf-legend">
+        <span class="badge confirmed"><span class="glyph">✓</span>confirmed — vendor list price</span>
+        <span class="badge reported"><span class="glyph">◐</span>reported — third-party / marketplace</span>
+        <span class="badge estimated"><span class="glyph">≈</span>estimated — representative figure</span>
+        <span class="badge unavailable"><span class="glyph">—</span>unavailable — no single number exists</span>
+      </div>
+
+      <p class="parity-note">
+        <strong>Quality parity assumption:</strong> both invoices assume the output is accepted at
+        comparable quality. That increasingly holds for routine versions of these tasks, and does not
+        yet hold for the hardest versions — where the honest AI price includes human review time.
+        <span id="hybrid-line"></span>
+      </p>
+
+      <p class="explore-row">
+        Explore each lens in depth:
+        <a href="#history">price over time</a> ·
+        <a href="#energy">energy</a> ·
+        <a href="water.html">water</a> ·
+        <a href="live.html">your live grid</a> ·
+        <a href="greenbench.html">the policy tool</a>
+      </p>
+      <p class="fx-note" id="fx-note"></p>
+    </div>
+  </section>
+
+  <section id="why" data-rail="Why it matters">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">02 · Why this matters</div>
+        <h2>The case for keeping score</h2>
+      </div>
+      <div class="essay">
+        <p class="lede">Every hard problem humanity faces is, at bottom, a problem of applying
+           intelligence. Curing disease, decarbonising the grid, teaching children… just about any
+           challenge you can think of is bounded by how much skilled thinking we can afford to point
+           at it. For all of history, that thinking came from exactly one source: human minds —
+           expensive to train, expensive to sustain, and impossible to copy.</p>
+        <p>That constraint is breaking. For the first time, cognition is something you can buy by
+           the token, and its price is collapsing — <a href="#history">GPT-4-level capability costs
+           roughly 300× less than it did in March 2023</a>. When a fundamental input gets cheap this
+           fast, history says everything downstream reorganises. Artificial light once cost a day's
+           wages for an hour of it; when it became too cheap to notice, it changed what a day
+           <em>is</em>. Computation and communication told the same story, each time remaking work,
+           cities, and lives.</p>
+        <p>Cheap intelligence is a bigger version of that story, because intelligence is the input
+           that produces every other input. A tutor for every child, a second medical opinion for
+           every scan, an engineer's attention for every village water pump. These things were never
+           uneconomic because they lacked value. They were uneconomic because intelligence was
+           scarce. <strong>The bridge between today and a radically better future is intelligence
+           and its application.</strong></p>
+        <p>You can already watch this happening in the data. The frontier labs now publish
+           task-level maps of their own economic footprint — Anthropic's
+           <a href="https://www.anthropic.com/economic-index" target="_blank" rel="noopener">Economic Index</a>
+           and Google's <a href="https://blog.google/innovation-and-ai/technology/research/understanding-the-ai-economy/" target="_blank" rel="noopener">ATLAS</a>,
+           which between them track thousands of tasks across hundreds of occupations. Two findings
+           recur: today's AI <em>augments</em> far more than it replaces — roughly 57% of use versus
+           43% — and adoption follows income, compounding the lead of places already ahead. Those are
+           the same tasks this site prices.</p>
+        <p>But transitions this large are not automatically beneficial. They move wages, remake
+           professions, concentrate capability, and draw real megawatts and real water from real
+           places. In short, the radical changes in the digital world have real world consequences.
+           Steering well requires seeing clearly, and much of the public conversation runs on vibes
+           in both directions.</p>
+        <p>Nowhere is the choice sharper than in Britain. Seventy-three per cent of the British
+           workforce now uses AI — up from a third a year earlier — and Google alone reckons its
+           tools already add
+           <a href="https://blog.google/company-news/inside-google/around-the-globe/google-europe/united-kingdom/unlocking-britains-next-era-of-productivity-building-a-nation-of-ai-trailblazers/" target="_blank" rel="noopener">£140 billion</a>
+           to UK activity, most of it flowing through small firms. Britain founded the modern AI lab;
+           its grid — often a third wind on a good day — is clean enough that compute here is
+           low-carbon almost by default. The raw materials of an AI-led growth decade are already
+           on the island.</p>
+        <p>And yet Britain keeps tying its own shoelaces together. It charges some of the rich
+           world's highest industrial electricity prices, waits years to approve the data centres
+           that sovereign AI depends on, and deploys AI most timidly in exactly the public services
+           where the gains would be largest. The binding constraint is not the technology, and — as
+           the <a href="live.html">live grid</a> and <a href="water.html">water</a> pages show — it
+           is not the physics. It is nerve. The narrower policy question, <em>should this particular
+           deployment go ahead?</em>, is what <a href="greenbench.html">GreenBench</a> is for.</p>
+        <p class="pull">Cheap intelligence is the clearest growth lever Britain has left. The only
+           question is whether it pulls it — or prices, permits and regulates its way out of the one
+           advantage it still holds.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" data-rail="Falling price">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">03 · The falling price</div>
+        <h2>Intelligence is getting cheaper — fast</h2>
+        <p>List price to draft a 1,000-word article, at each era's model prices. The frontier
+           flagship stays premium; the price of <em>yesterday's</em> frontier collapses —
+           GPT-4-level capability costs roughly 300× less than it did in March 2023.</p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <h3>List price for the benchmark article task</h3>
+            <p class="chart-sub">USD per task · archived launch list prices; hollow points are estimates</p>
+          </div>
+          <span id="history-toggle"></span>
+        </div>
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--hist-a)"></span>Frontier flagship of the day</span>
+          <span class="item"><span class="swatch" style="background:var(--hist-b)"></span>Cheapest GPT-4-class model</span>
+          <span class="item"><span class="swatch hollow"></span>estimated point</span>
+        </div>
+        <div id="history-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="energy" data-rail="Energy lens">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">04 · The energy lens</div>
+        <h2>Two fuels, two prices</h2>
+        <p>A human runs on roughly 2,000 kcal a day — about 2.3&nbsp;kWh of energy, bought as food.
+           A model runs on grid electricity. The fuels differ in price per unit
+           as much as the workers differ in price per task.</p>
+      </div>
+
+      <div class="chart-card">
+        <h3>What a kilowatt-hour of “worker fuel” costs</h3>
+        <p class="chart-sub">USD per kWh delivered to the worker · US averages · <a href="live.html">see your grid live →</a></p>
+        <div id="fuel-chart"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <h3>Energy to finish each task</h3>
+            <p class="chart-sub">Watt-hours per completed task · every gridline labelled, one order of magnitude past the data</p>
+          </div>
+          <span id="energy-toggle"></span>
+        </div>
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--human)"></span>Human (metabolic)</span>
+          <span class="item"><span class="swatch" style="background:var(--ai)"></span>AI (inference, incl. data centre overhead)</span>
+        </div>
+        <div id="energy-chart"></div>
+      </div>
+
+      <p class="parity-note" style="margin-top:20px">
+        <strong>The rebound:</strong> per-task energy is tiny, but total AI electricity demand is
+        growing fast even as each task gets leaner. This is often called Jevons' paradox — though it
+        is less a paradox than a predictable release of demand once AI sharply lowers the private
+        marginal cost of a service. Per-task figures answer “what does <em>this</em> cost?”, not
+        “what will the world use?” — for the deployment-level question, see
+        <a href="greenbench.html">GreenBench</a>.
+      </p>
+    </div>
+  </section>
+
+  <section id="water" data-rail="Water &amp; grid">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">05 · Water &amp; the live grid</div>
+        <h2>The other two invoices have their own pages</h2>
+        <p>Water is in the ledger above; its full accounting — on-site cooling vs the full chain,
+           closed-loop cooling, and why siting matters — lives on its own page. So does the live
+           grid, which reprices AI energy by your region and the current wind.</p>
+      </div>
+
+      <div class="teaser-grid">
+        <a class="teaser-card" href="water.html">
+          <div class="teaser-icon">💧</div>
+          <h3>The water lens</h3>
+          <p id="water-teaser">—</p>
+          <span class="teaser-cta">Open the water lens →</span>
+        </a>
+        <a class="teaser-card" href="live.html">
+          <div class="teaser-icon">⚡</div>
+          <h3>Your grid, live</h3>
+          <p>Electricity's price and carbon swing by the half-hour and by region. This page reads
+             your grid right now and reprices the energy behind a task — the same task can emit
+             hundreds of times more carbon in one region than another.</p>
+          <span class="teaser-cta">Open the live grid →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="training" data-rail="Making a mind">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">06 · Making a mind</div>
+        <h2>Training costs: the flip</h2>
+        <p>Educating one human costs far less than training one frontier model.
+           But a model is copied and shared across trillions of tasks, while a human
+           mind serves one career. Amortisation reverses the comparison.</p>
+      </div>
+
+      <div class="train-grid">
+        <article class="train-card">
+          <div class="who"><span class="dot" style="background:var(--human)"></span>One human, K-12 + college</div>
+          <div class="big" id="t-human-total">—</div>
+          <p class="desc">Public spending on one bachelor's-track education, over ~17 years.</p>
+          <dl>
+            <div><dt>Serves</dt><dd>one career, ~72,000 working hours</dd></div>
+            <div><dt>Amortised</dt><dd id="t-human-hr">—</dd></div>
+            <div><dt>Metabolic energy while training</dt><dd id="t-human-energy">—</dd></div>
+          </dl>
+        </article>
+
+        <article class="train-card">
+          <div class="who"><span class="dot" style="background:var(--ai)"></span>One frontier model</div>
+          <div class="big" id="t-ai-total">—</div>
+          <p class="desc">Representative frontier training run, 2025–26 ($200–500M range).</p>
+          <dl>
+            <div><dt>Serves</dt><dd>~1 trillion tasks across all users</dd></div>
+            <div><dt>Amortised</dt><dd id="t-ai-task">—</dd></div>
+            <div><dt>Electricity while training</dt><dd id="t-ai-energy">—</dd></div>
+          </dl>
+        </article>
+      </div>
+
+      <div class="punchline" id="train-punchline"></div>
+    </div>
+  </section>
+
+  <section id="tool" data-rail="GreenBench">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">07 · The policy tool</div>
+        <h2>From measurement to permission</h2>
+        <p>Per-task numbers answer “what does this cost?”. Governing AI needs a different question:
+           should <em>this</em> deployment happen at all? GreenBench turns the measurement on this
+           site into a three-gate permission standard.</p>
+      </div>
+
+      <a class="teaser-card wide" href="greenbench.html">
+        <div class="teaser-icon">⚖️</div>
+        <h3>GreenBench — a permission standard for large-scale AI</h3>
+        <p>Run a deployment through three gates: <strong>integrity</strong> (is the ecological
+           burden auditable?), <strong>counterfactual justification</strong> (does it beat human
+           work, conventional software, and no action — retries and oversight included?), and
+           <strong>justice</strong> (can this place carry it?). The verdict updates as you answer:
+           approve, approve with conditions, or refuse.</p>
+        <span class="teaser-cta">Open GreenBench →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="methodology" data-rail="Methodology">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">08 · Methodology</div>
+        <h2>How the numbers are built</h2>
+      </div>
+
+      <div class="method-block">
+        <h3>The framework: three layers, one price</h3>
+        <p>For each worker, cost is examined through three layers:</p>
+        <ol>
+          <li><strong>Marginal</strong> — the market price of the completed task (a freelance rate, a wage × time, an API bill).</li>
+          <li><strong>Sustaining</strong> — the fuel that keeps the worker running: food for the human, electricity for the model.</li>
+          <li><strong>Training</strong> — the capital that made the worker capable: education for the human, the pre-training run for the model.</li>
+        </ol>
+        <p style="margin-top:10px">These layers are <strong>lenses, not addends</strong>. A wage already repays
+        groceries and tuition; an API price already covers the power bill and amortises the training run.
+        So the headline comparison is always market price vs. market price, and the “inside the price”
+        bars show how much of each invoice its fuel and training actually account for. The striking result:
+        for <em>both</em> workers, fuel is a rounding error — the price of intelligence is almost entirely
+        capital and scarcity, not energy.</p>
+
+        <h3>Why tasks, not prompts</h3>
+        <p>Businesses and governments do not buy prompts; they buy services — completed jobs at an
+           agreed quality. When output quality is poor, retries, human checking, and downstream
+           correction expand the true labour and compute cost while disappearing from headline
+           per-prompt figures. That is why every number on this site is priced per <em>completed
+           task</em>, why the ledger carries a hybrid figure with human review time included, and
+           why <a href="greenbench.html">GreenBench</a> benchmarks deployments against a human-work
+           baseline, a conventional-software baseline, and a no-action baseline. It is also how the
+           frontier labs now measure themselves: Anthropic's
+           <a href="https://www.anthropic.com/economic-index" target="_blank" rel="noopener">Economic Index</a>
+           and Google's <a href="https://blog.google/innovation-and-ai/technology/research/understanding-the-ai-economy/" target="_blank" rel="noopener">ATLAS</a>
+           (≈4,000 tasks, 800 occupations) both map AI usage by task and occupation, not by prompt.</p>
+
+        <h3>Data confidence and freshness</h3>
+        <ul>
+          <li><strong>Every model price carries a confidence badge.</strong> <em>Confirmed</em> means the
+              vendor's own list price; <em>reported</em> means a marketplace or third-party figure
+              (open-weight models have no single vendor price); <em>estimated</em> means a representative
+              number where sources conflict or vary by host; <em>unavailable</em> means no honest single
+              number exists, and the site shows “—” rather than inventing one.</li>
+          <li><strong>All data lives in dated snapshots</strong> (<code>data/YYYY-MM-DD.json</code>). The
+              “Data as of” picker in the top bar switches snapshots; a refresh script
+              (<code>scripts/update-data.mjs</code>) pulls current model prices from the OpenRouter API and
+              official statistics where keys are available, and appends a new snapshot — so the site
+              accumulates its own history as sources update.</li>
+        </ul>
+
+        <h3>Key conventions</h3>
+        <ul>
+          <li><strong>Human energy accounting:</strong> a worker's full 2,000 kcal/day (2.33 kWh) is allocated
+              across an 8-hour workday → 291 Wh per working hour. This mirrors the AI side, where Google's
+              published per-prompt figure includes idle machines and data centre overhead — both sides carry
+              their standby costs.</li>
+          <li><strong>AI energy scaling:</strong> anchored to published medians (0.24 Wh per median Gemini prompt,
+              0.34 Wh per average ChatGPT query) and scaled linearly with tokens processed. This is a modelling
+              assumption, not a measurement; heavy reasoning tasks land in the tens of watt-hours, consistent
+              with press estimates for reasoning-mode queries.</li>
+          <li><strong>AI fuel price:</strong> industrial electricity (8.66¢/kWh), the closest EIA class to data centre
+              rates. The human's food is priced at the USDA moderate plan (~$15.50/day).</li>
+          <li><strong>Human training:</strong> 13 years of K-12 at $16,080/yr plus 4 years of public college at
+              $36,101/yr ≈ $353k, amortised over a 40-year, 72,000-hour career.</li>
+          <li><strong>AI training:</strong> a $300M representative frontier run amortised over ~1 trillion lifetime
+              queries, scaled per task by token volume. Training electricity is estimated from Epoch AI's finding
+              that energy is ~2–6% of development cost.</li>
+          <li><strong>Water:</strong> Google reports ~0.26 mL consumed per 0.24 Wh median prompt
+              (≈1.08 mL/Wh) on-site; the full-chain figure adds ~4.35 L/kWh for electricity generation
+              (LBNL). Human water is the food footprint (~1 L/kcal, FAO) plus drinking water. The
+              <a href="water.html">water lens</a> shows all of this in depth.</li>
+          <li><strong>Hybrid review:</strong> the hybrid figure adds a per-task estimate of human review
+              time (2–30 min depending on task), priced at the median wage. The review-time estimates are
+              ours — treat them as illustrative.</li>
+        </ul>
+
+        <h3>What this comparison is not</h3>
+        <ul>
+          <li><strong>Not a claim of interchangeability.</strong> Tasks are not jobs. The human price bundles
+              accountability, context, relationships, and liability that an API call does not carry.</li>
+          <li><strong>Not a physics claim about wages.</strong> Human labour is expensive because human time is
+              scarce and lives are expensive to sustain in full — not because metabolic energy costs $6.66/kWh.</li>
+          <li><strong>Not stable.</strong> AI prices per unit of capability have fallen sharply year over year —
+              see section 03 — and each snapshot is dated for exactly that reason.</li>
+          <li><strong>US-centric.</strong> Wages, food, electricity, and tuition all vary enormously by country.
+              The <a href="live.html">live page</a> localises the energy lens where free data allows.</li>
+        </ul>
+
+        <h3>The full table</h3>
+        <p>Every chart above, as numbers (current model selection applies):</p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data-table" id="data-table" aria-label="Full cost comparison per task"></table>
+      </div>
+
+      <div class="method-block">
+        <h3>Sources</h3>
+        <ul class="sources-list" id="sources-list"></ul>
+        <p class="verified-note" id="verified-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <div class="footer-brand">The Price of Intelligence</div>
+          <p class="footer-tag" id="footer-snapshot">—</p>
+        </div>
+        <nav class="footer-links" aria-label="All pages">
+          <a href="index.html">The benchmark</a>
+          <a href="water.html">Water lens</a>
+          <a href="live.html">Live grid</a>
+          <a href="greenbench.html">GreenBench</a>
+          <a href="index.html#methodology">Methodology</a>
+        </nav>
+      </div>
+      <p class="footer-fine">All figures are US averages and published list prices; view source for every
+         constant and calculation. Built as an open methodology — corrections welcome.</p>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="currency.js"></script>
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GreenBench — The Price of Intelligence</title>
+  <meta name="description" content="A three-gate permission standard for large-scale AI deployment: auditable ecological burden, counterfactual justification, and local ecological justice.">
+  <meta property="og:title" content="GreenBench — The Price of Intelligence">
+  <meta property="og:description" content="Should this AI deployment be approved? Run it through the three gates: integrity, counterfactual justification, and justice under local ecological constraint.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b0b0b'/%3E%3Ctext x='50' y='74' font-size='62' text-anchor='middle'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem("poi-theme"); } catch (e) {}
+      var theme = (stored === "light" || stored === "dark")
+        ? stored
+        : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">The Price of Intelligence</a>
+      <div class="nav-explore">
+        <button class="nav-explore-trigger" aria-haspopup="true" aria-expanded="false">Explore <span class="chev" aria-hidden="true">›</span></button>
+        <div class="nav-menu" aria-label="Pages">
+          <a href="index.html">The benchmark</a>
+          <a href="live.html">Live grid</a>
+          <a href="water.html">Water</a>
+          <a href="greenbench.html" aria-current="page">GreenBench</a>
+        </div>
+      </div>
+      <span class="spacer"></span>
+      <label class="currency-select" id="currency-wrap" title="Display currency">
+        <select id="currency-select" aria-label="Display currency"></select>
+      </label>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">◐</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="breadcrumb"><a href="index.html">The Price of Intelligence</a> · the policy tool</p>
+      <h1>GreenBench</h1>
+      <div class="kicker">A permission standard for large-scale AI</div>
+      <p class="sub">
+        Large-scale AI should be approved only when its ecological burden is auditable, it is
+        likely to outperform realistic alternatives, and it is compatible with local ecological
+        justice. Run a deployment through the three gates below.
+      </p>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">Why a standard</div>
+        <h2>Disclosure is not justification</h2>
+        <p>For years, efficiency held data centre electricity roughly flat. AI reversed that: the IEA
+           put data centres at ~415 TWh in 2024 (~1.5% of global electricity) and projects ~945 TWh
+           by 2030, with AI driving the growth. Today's governance answers with per-prompt figures
+           and annual net-zero certificates — numbers that can't say whether any given deployment is
+           <em>worth it</em>. Thin governance risks blocking high-value AI whose absolute use looks
+           large while licensing low-value systems whose per-interaction numbers look small.</p>
+      </div>
+
+      <div class="ratio-row" style="grid-template-columns:1fr 1fr 1fr; margin-top:0">
+        <div class="stat-tile">
+          <div class="label">Data centre electricity, 2024</div>
+          <div class="value">~415 TWh</div>
+          <div class="sub">≈1.5% of global electricity (IEA)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">Projected by 2030</div>
+          <div class="value">~945 TWh</div>
+          <div class="sub">AI is the main driver (IEA)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">The unit that matters</div>
+          <div class="value">The task</div>
+          <div class="sub">nobody buys prompts; they buy completed jobs at agreed quality</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">The assessment</div>
+        <h2>Three gates</h2>
+        <p>Answer for a specific deployment — here, now, for this purpose. The verdict updates as
+           you go: approve, approve with conditions, or refuse. Approvals justified on
+           sustainability grounds are provisional until a post-deployment rebound audit.</p>
+      </div>
+
+      <article class="chart-card gate-card">
+        <div class="gate-num">Gate 1 · Integrity <span class="gate-status" id="g1-status"></span></div>
+        <h3>Is the ecological burden auditable?</h3>
+        <p class="chart-sub">No deployment should be justified on sustainability grounds unless its
+           claims are reported in a standardised, auditable form. Tick what the operator actually
+           discloses.</p>
+        <div class="check-list" id="g1-checks">
+          <label><input type="checkbox" data-g1> Total electricity use (TWh), site-level</label>
+          <label><input type="checkbox" data-g1> Emissions on <strong>both</strong> location-based and market-based bases — contractual claims can obscure local grid reality</label>
+          <label><input type="checkbox" data-g1> Water <strong>withdrawal</strong> and <strong>consumption</strong> reported separately</label>
+          <label><input type="checkbox" data-g1> Geography, time period, and cooling method</label>
+          <label><input type="checkbox" data-g1> Explicitly declared system boundaries (on-site only vs electricity-related water, etc.)</label>
+          <label><input type="checkbox" data-g1> Stated uncertainty ranges</label>
+        </div>
+      </article>
+
+      <article class="chart-card gate-card">
+        <div class="gate-num">Gate 2 · Counterfactual justification <span class="gate-status" id="g2-status"></span></div>
+        <h3>Does it beat the realistic alternatives?</h3>
+        <p class="chart-sub">The unit of analysis is a completed task at an agreed quality — including
+           retries, oversight, and downstream correction. Benchmark against three baselines: human
+           work, conventional software, and no action.</p>
+        <div class="field-grid">
+          <div class="field">What does the deployment mostly do?
+            <select id="g2-demand">
+              <option value="displace">Displaces work that must happen anyway (e.g. clinical discharge summaries)</option>
+              <option value="mixed">A mix of displacement and new demand</option>
+              <option value="induce">Primarily induces new demand (e.g. 100,000 extra weekly ad variants)</option>
+            </select>
+          </div>
+          <div class="field">Could conventional software or a template do it at acceptable quality?
+            <select id="g2-software">
+              <option value="no">No — it needs open-ended language or reasoning</option>
+              <option value="yes">Yes — deterministic software would do</option>
+            </select>
+          </div>
+          <div class="field">Representative task (from the benchmark ledger)
+            <select id="g2-task"></select>
+          </div>
+          <div class="field">Model
+            <select id="g2-model"></select>
+          </div>
+          <div class="field">Retries per accepted output: <strong id="g2-retries-val">1.5×</strong>
+            <input type="range" id="g2-retries" min="1" max="4" step="0.5" value="1.5">
+          </div>
+          <div class="field">Human oversight per task (minutes): <strong id="g2-oversight-val">15</strong>
+            <input type="range" id="g2-oversight" min="0" max="60" step="5" value="15">
+          </div>
+        </div>
+        <div class="gate2-result" id="g2-result">—</div>
+      </article>
+
+      <article class="chart-card gate-card">
+        <div class="gate-num">Gate 3 · Justice under local ecological constraint <span class="gate-status" id="g3-status"></span></div>
+        <h3>Can this place carry it?</h3>
+        <p class="chart-sub">An accurately measured, comparatively efficient deployment can still be
+           unacceptable if it worsens scarcity or imposes burdens on communities without
+           commensurate public value and meaningful participation. Annual averages obscure this.</p>
+        <div class="field-grid">
+          <div class="field">Is the site in a water-stressed basin?
+            <select id="g3-water">
+              <option value="no">No</option>
+              <option value="unknown">Unknown / not assessed</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+          <div class="field">Does it strain the local grid at peak periods?
+            <select id="g3-grid">
+              <option value="no">No / flexible & off-peak</option>
+              <option value="unknown">Unknown / not assessed</option>
+              <option value="yes">Yes</option>
+            </select>
+          </div>
+          <div class="field">Public value of the use case
+            <select id="g3-value">
+              <option value="legal">Legal obligation / essential service</option>
+              <option value="safety">Accessibility, safety, or substantial social benefit</option>
+              <option value="commercial">Meaningful commercial value</option>
+              <option value="marginal">Marginal commercial optimisation</option>
+            </select>
+          </div>
+          <div class="field">Meaningful participation for affected communities?
+            <select id="g3-participation">
+              <option value="yes">Yes — consulted with real influence</option>
+              <option value="no">No / token consultation</option>
+            </select>
+          </div>
+        </div>
+      </article>
+
+      <div class="verdict" id="verdict" aria-live="polite">
+        <div class="verdict-head"><span class="icon" id="verdict-icon">⚖️</span><span id="verdict-label">Answer the gates above</span></div>
+        <ul id="verdict-reasons"></ul>
+        <p class="note" id="verdict-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">Recommendations</div>
+        <h2>What adopting this looks like</h2>
+      </div>
+      <div class="method-block">
+        <ol>
+          <li><strong>Procurement:</strong> public-sector buyers require a GreenBench assessment before
+              approving or renewing large-scale AI contracts.</li>
+          <li><strong>Disclosure:</strong> governments mandate auditable, site-level reporting for large
+              AI and data centre operators — electricity use, peak-period demand, water withdrawal and
+              consumption, local water-stress context, and both emissions bases, on standardised boundaries.</li>
+          <li><strong>Presumption:</strong> planning and procurement bodies adopt a rebuttable presumption
+              against high-volume generative deployments where the no-action baseline is credible and local
+              ecological constraints are material — rebutted by demonstrated public value, rebound auditing,
+              and mitigation conditions.</li>
+        </ol>
+        <h3>Where this sits</h3>
+        <p>GreenBench is not anti-innovation: it is a targeted permission standard for large-scale
+           deployments that permits high-value substitution while raising scrutiny for induced demand.
+           Efficiency-led Green AI and carbon reporting remain valuable — but neither tells a policymaker
+           whether a deployment should happen. It is deliberately narrower than full lifecycle assessment:
+           stationary compute is the immediate policy bottleneck, upstream of robotics, and the point where
+           approval decisions bite. The <a href="index.html">benchmark ledger</a>, the
+           <a href="live.html">live grid page</a>, and the <a href="water.html">water lens</a> are the
+           measurement layer this standard runs on.</p>
+        <p class="refs">Grounding: Masanet et al. 2020 (efficiency plateau) · IEA 2025, <a href="https://www.iea.org/reports/energy-and-ai" target="_blank" rel="noopener">Energy and AI</a> ·
+           Ostrom 1990 (commons governance) · Hardin 1968 · Locke 1988 &amp; Kant 1996 (legitimate appropriation of shared resources) ·
+           D'Ignazio &amp; Klein 2020, <em>Data Feminism</em> (measurement makes burdens visible) ·
+           Samuel, Lucivero &amp; Somavilla 2022 · Halsband 2022 · Robbins &amp; van Wynsberghe 2022.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <div class="footer-brand">The Price of Intelligence</div>
+          <p class="footer-tag" id="footer-snap">—</p>
+        </div>
+        <nav class="footer-links" aria-label="All pages">
+          <a href="index.html">The benchmark</a>
+          <a href="water.html">Water lens</a>
+          <a href="live.html">Live grid</a>
+          <a href="greenbench.html">GreenBench</a>
+          <a href="index.html#methodology">Methodology</a>
+        </nav>
+      </div>
+      <p class="footer-fine">GreenBench is an assessment aid, not legal advice — it operationalises a
+         three-gate argument for governing AI as ecological opportunity cost under local ecological
+         constraint. Built as an open methodology — corrections welcome.</p>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="currency.js"></script>
+  <script src="greenbench.js"></script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Water Lens — The Price of Intelligence</title>
+  <meta name="description" content="How much water a completed task consumes when a human mind does it versus a machine one — from data centre cooling to the water embedded in food.">
+  <meta property="og:title" content="The Water Lens — The Price of Intelligence">
+  <meta property="og:description" content="A glass of water covers a hundred AI article drafts. The human version of the same task carries a bathtub-scale water footprint — in the food.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230b0b0b'/%3E%3Ctext x='50' y='74' font-size='62' text-anchor='middle'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <script>
+    (function () {
+      var stored = null;
+      try { stored = localStorage.getItem("poi-theme"); } catch (e) {}
+      var theme = (stored === "light" || stored === "dark")
+        ? stored
+        : (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav class="top">
+    <div class="wrap">
+      <a class="brand" href="index.html">The Price of Intelligence</a>
+      <div class="nav-explore">
+        <button class="nav-explore-trigger" aria-haspopup="true" aria-expanded="false">Explore <span class="chev" aria-hidden="true">›</span></button>
+        <div class="nav-menu" aria-label="Pages">
+          <a href="index.html">The benchmark</a>
+          <a href="live.html">Live grid</a>
+          <a href="water.html" aria-current="page">Water</a>
+          <a href="greenbench.html">GreenBench</a>
+        </div>
+      </div>
+      <span class="spacer"></span>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light and dark theme" title="Toggle theme">◐</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="breadcrumb"><a href="index.html">The Price of Intelligence</a> · a lens on the benchmark</p>
+      <h1>The water lens</h1>
+      <div class="kicker">The third invoice: litres, not dollars</div>
+      <p class="sub">
+        Data centre water use is a headline concern. AI needs water. So do humans.
+      </p>
+      <div class="hero-figure">
+        <div class="big" id="hero-water">—</div>
+        <p class="caption" id="hero-water-caption">loading…</p>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">The comparison</div>
+        <h2>Water to finish each task</h2>
+        <p>AI water is shown two ways: on-site data centre cooling (from Google's measured
+           0.26&nbsp;mL per median prompt), and the full chain including the water consumed
+           generating the electricity (~4.35&nbsp;L/kWh US average — LBNL, via Andy Masley's
+           analysis). Human water is the consumptive footprint of the food that powers the
+           working hours — roughly one litre per kilocalorie, the FAO's rule of thumb — plus
+           drinking water. Upstream compared with upstream.</p>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-head">
+          <div>
+            <h3>Litres per completed task</h3>
+            <p class="chart-sub">Every gridline labelled, one order of magnitude past the data</p>
+          </div>
+          <span id="water-toggle"></span>
+        </div>
+        <div class="legend">
+          <span class="item"><span class="swatch" style="background:var(--human)"></span>Human (water embedded in food + drinking)</span>
+          <span class="item"><span class="swatch" style="background:var(--ai)"></span>AI, full chain (cooling + power-plant water)</span>
+          <span class="item"><span class="swatch hollow" style="border-color:var(--ai)"></span>AI, on-site cooling only</span>
+        </div>
+        <div id="water-chart"></div>
+      </div>
+
+      <div class="ratio-row" style="grid-template-columns:1fr 1fr 1fr">
+        <div class="stat-tile">
+          <div class="label">One glass of water (250 mL) covers</div>
+          <div class="value" id="tile-glass">—</div>
+          <div class="sub" id="tile-glass-sub">—</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">Human water for the same task</div>
+          <div class="value" id="tile-human">—</div>
+          <div class="sub" id="tile-human-sub">—</div>
+        </div>
+        <div class="stat-tile">
+          <div class="label">Water gap</div>
+          <div class="value" id="tile-ratio">—</div>
+          <div class="sub">human footprint ÷ AI full-chain water</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <div class="num">Honest accounting</div>
+        <h2>What these numbers do and don't count</h2>
+      </div>
+      <div class="method-block">
+        <ul>
+          <li><strong>On-site vs full chain — we show both.</strong> Google's published 0.26 mL/prompt
+              counts only data centre cooling (the hollow points). Most of AI's real water is upstream:
+              generating a kWh of US electricity consumes ~4.35 L on average, mostly power-plant cooling
+              (Lawrence Berkeley National Laboratory, via Andy Masley's analysis). The solid AI points add
+              that in — full chain is roughly <strong id="chain-mult">—</strong> the on-site figure, and it is
+              the right comparison here, because the human food footprint is upstream water too.</li>
+          <li><strong>Withdrawal is not consumption.</strong> Water taken from a basin and returned
+              is not water evaporated away. Serious accounting reports the two separately and
+              declares its boundaries — every figure on this page is <em>consumptive</em>. Blurring
+              that distinction is how both the scary and the soothing headline numbers get made.</li>
+          <li><strong>Closed-loop cooling changes the on-site story.</strong> Many new AI data centres use
+              closed-loop liquid cooling: the loop is filled once and recirculated, so on-site consumption
+              approaches zero — and liquid cooling cuts total facility power by ~10%, which also cuts the
+              upstream water. The real engineering trade is water-for-electricity: evaporative designs
+              save energy but consume water; dry cooling spends watts to save litres. This is why
+              per-facility numbers vary wildly, and why viral per-prompt figures that mix cooling designs,
+              climates, and accounting boundaries disagree by 100×.</li>
+          <li><strong>Keep the denominator in view.</strong> As Masley documents, US data centres' water
+              consumption is a rounding error next to agriculture — irrigated farmland dwarfs every
+              data centre combined, and famous viral comparisons (a bottle per email!) collapse when you
+              notice a single hamburger embeds ~2,400 L. Per-task water is micro; the meaningful questions
+              are totals and siting.</li>
+          <li><strong>The human figure is a food footprint, not a tap.</strong> Nobody pours a bathtub
+              over a freelancer. The ~250 L per working hour is consumptive freshwater used to grow the
+              food that fuels the person — the same accounting standard (upstream, consumptive) that makes
+              the data centre number meaningful.</li>
+          <li><strong>Diet moves the human number several-fold.</strong> The FAO's ~1 L/kcal is an average:
+              a beef-heavy diet runs far above it, a plant-based diet well below. We use the average and
+              badge it <em>estimated</em>.</li>
+          <li><strong>Training has a water bill too.</strong> A frontier run's ~139 GWh at typical
+              data centre water intensity (~1.1 L/kWh on-site) is roughly <strong id="training-water">—</strong>
+              — about <span id="training-pools">—</span> Olympic pools, once, amortised across ~1 trillion tasks.</li>
+          <li><strong>Location matters more than totals.</strong> A litre evaporated in a water-stressed
+              basin is not a litre in a rainy one — the same lesson as the carbon strip on the
+              <a href="live.html">live page</a>: where you compute is becoming as important as how much.</li>
+        </ul>
+        <h3>Sources</h3>
+        <ul class="sources-list" id="water-sources"></ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-cols">
+        <div>
+          <div class="footer-brand">The Price of Intelligence</div>
+          <p class="footer-tag" id="footer-snap">—</p>
+        </div>
+        <nav class="footer-links" aria-label="All pages">
+          <a href="index.html">The benchmark</a>
+          <a href="water.html">Water lens</a>
+          <a href="live.html">Live grid</a>
+          <a href="greenbench.html">GreenBench</a>
+          <a href="index.html#methodology">Methodology</a>
+        </nav>
+      </div>
+      <p class="footer-fine">The water lens shares the main site's dated snapshot and token-scaling model —
+         see the <a href="index.html#methodology">methodology</a>. Built as an open methodology — corrections welcome.</p>
+    </div>
+  </footer>
+
+  <div class="tooltip" id="tooltip" role="status"></div>
+
+  <script src="data.js"></script>
+  <script src="charts.js"></script>
+  <script src="water.js"></script>
+</body>
+</html>

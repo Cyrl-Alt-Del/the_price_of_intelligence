@@ -1,0 +1,21 @@
+{
+  "note": "Archived list prices per million tokens at each model's launch. 'flagship' tracks the frontier model of the day; 'gpt4class' tracks the cheapest model matching March-2023 frontier (GPT-4) capability. Confidence: 'archived' = widely documented launch list price; 'estimated' = representative marketplace price; 'reported' = current third-party marketplace price.",
+  "benchmarkTask": { "tokensIn": 500, "tokensOut": 4500, "label": "drafting a 1,000-word article" },
+  "flagship": [
+    { "date": "2023-03", "name": "GPT-4",            "inPerM": 30.0,  "outPerM": 60.0,  "confidence": "archived" },
+    { "date": "2023-11", "name": "GPT-4 Turbo",      "inPerM": 10.0,  "outPerM": 30.0,  "confidence": "archived" },
+    { "date": "2024-05", "name": "GPT-4o",           "inPerM": 5.0,   "outPerM": 15.0,  "confidence": "archived" },
+    { "date": "2024-12", "name": "o1",               "inPerM": 15.0,  "outPerM": 60.0,  "confidence": "archived" },
+    { "date": "2025-05", "name": "Claude Opus 4",    "inPerM": 15.0,  "outPerM": 75.0,  "confidence": "archived" },
+    { "date": "2025-08", "name": "GPT-5",            "inPerM": 1.25,  "outPerM": 10.0,  "confidence": "archived" },
+    { "date": "2025-11", "name": "Claude Opus 4.5",  "inPerM": 5.0,   "outPerM": 25.0,  "confidence": "archived" },
+    { "date": "2026-07", "name": "Claude Opus 4.8",  "inPerM": 5.0,   "outPerM": 25.0,  "confidence": "archived" }
+  ],
+  "gpt4class": [
+    { "date": "2023-03", "name": "GPT-4",             "inPerM": 30.0,  "outPerM": 60.0,  "confidence": "archived" },
+    { "date": "2024-05", "name": "GPT-4o",            "inPerM": 5.0,   "outPerM": 15.0,  "confidence": "archived" },
+    { "date": "2024-12", "name": "Llama 3.3 70B (hosted)", "inPerM": 0.6, "outPerM": 0.7, "confidence": "estimated" },
+    { "date": "2025-03", "name": "DeepSeek V3",       "inPerM": 0.27,  "outPerM": 1.10,  "confidence": "archived" },
+    { "date": "2026-07", "name": "DeepSeek V4 Flash", "inPerM": 0.098, "outPerM": 0.196, "confidence": "reported" }
+  ]
+}
